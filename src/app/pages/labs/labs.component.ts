@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, signal } from '@angular/core';
 import{ FormControl, ReactiveFormsModule } from '@angular/forms'
 
+
 @Component({
   selector: 'app-labs',
   standalone: true,
