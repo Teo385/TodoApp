@@ -31,6 +31,11 @@ export class LabsComponent {
   });
 
   colorCtrl = new FormControl();
+  widthCtrl = new FormControl(50{
+    nonNullable: true
+  });
+  
+
   // esta es la manera de ver el cambio pero desde la logica
   constructor(){
     this.colorCtrl.valueChanges.subscribe(value =>{
@@ -79,6 +84,11 @@ export class LabsComponent {
   }
 
   
+
+
+
+
+
 
 
 

@@ -92,6 +92,14 @@
   <!-- Facilita mucho el codigo a la hora de usar un imput -->
   <input type="color" [formControl]="colorCtrl">
   <p>color: {{ colorCtrl.value }}</p>
+  <hr />
+  <!-- svg -->
+
+  <svg>
+    <g>
+      <rect x="0" y="0" height="100" width="100" [attr.fill]="colorCtrl.value" />
+    </g>
+  </svg>
 
 
 

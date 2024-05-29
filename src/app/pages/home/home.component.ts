@@ -35,12 +35,14 @@ export class HomeComponent {
   }
     
   )
-
+// validacion para no aceptar valores nulos ni espacios (trim quita espacios)
   changeHanler(){
     if(this.newTaskCtrl.valid){
-      const value = this.newTaskCtrl.value
-      this.addTask(value);
-      this.newTaskCtrl.setValue('')
+      const value = this.newTaskCtrl.value.trim();
+      if (value !== ''){
+        this.addTask(value);
+        this.newTaskCtrl.setValue('')
+      }
     }
   }
 
