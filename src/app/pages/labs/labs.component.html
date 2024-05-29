@@ -3,7 +3,7 @@
     <h1>Hola mi primer proyecto</h1>
     <h2>{{ Welcome }}</h2>
     <ul>
-      <li *ngFor="let task of tasks">
+      <li *ngFor="let task of tasks()">
         {{ task }}
       </li>
     </ul>
@@ -11,18 +11,99 @@
     <hr />
     <h2>{{ 'Hola ' .repeat(4) }}</h2>
     <p> La suma de 3 + 3 es  {{3 + 3}}</p>
-    <p>Hola soy {{ name }} y mi edad es {{ person.age }}</p>
+    <p>Hola soy {{ name() }} y mi edad es {{ person().age }}</p>
   
     <hr />
-    <img [src]="person.avartar" alt="">
+    <img [src]="person().avartar" alt="">
+
     <!-- Enlazando  una valriable a una propiedad de un elemento -->
-    <input type="number" [value]="person.age">
+
+    <input type="number" [value]="person().age">
     <button [disabled]="disabled">Click me</button>
-    <p>{{ person.name }}</p>
-    <hr />
+    <p>{{ person().name }}</p>
+    <hr /> 
+
+    <!-- Eventos -->
+
     <button (click)="clickHandler()">Click me</button>
     <button (dblclick)="clickHandler()">Double click me</button>
     <p>(change)</p>
-    <input type="number" [value]="person.age" (change)="changeHanler($event)">
-  
+    <input type="number" [value]="person().age" (change)="changeHanler($event)">
+    <!-- Solo cambia con un click o desenfoque (para usar el enter) -->
+    <p>(change)</p>
+    <input type="text" [value]="person().name" (change)="changeHanler($event)">
+    <!-- Este cambia por cada tecla presionada (recomandado con texto)  -->
+    <p>(keydown)</p>
+    <input type="text" [value]="person().name" (keydown)="keydownHanler($event)">
+    <!-- Se puede expecificar que tecla se oprime -->
+    <p>(keydown con shift)</p>
+    <input type="text" [value]="person().name" (keydown.shift.t)="clickHandler()">
+    <hr /> 
+
+    <!-- Signal -->
+    <h1>Signals</h1>
+    <!-- El cambio de actuliza de manera automatica  -->
+    <input type="text" [value]="name()" (change)="changeHanler($event)">
+    <p>{{ name() }}</p>
+    <p>{{ name() }}</p>
+  <!--se vuelve una array con el signal  -->
+  <p>Total: {{ tasks().length }}</p>
+    <ul>
+      <li *ngFor="let task of tasks(); index as i">
+        {{ i }} {{ task }}
+      </li>
+    </ul>
+    <hr /> 
+
+  <!--*ngIf-->
+
+  <!-- condicional para mostrar o no contenido -->
+  <div *ngIf="1 == 1">
+    My content
+  </div>
+  <br />
+  <div *ngIf="name() == 'Mateo'">
+    My other content
+  </div>
+  <br />
+  <input type="number" [value]="person().age" (change)="changeAge($event)">
+  <div *ngIf="person().name === name() && person().age > 18; else elseBlock">
+    Soy Teo y soy mayor de 18
+  </div>
+  <!-- Lo que va a mostrar el else -->
+  <ng-template #elseBlock>
+    Soy Mateo o soy menor de edad
+  </ng-template>
+  <hr />
+
+  <!-- ngswitch -->
+
+  <input type="text" [value]="person().name" (change)="changeName($event)">
+  <div [ngSwitch]="person().name">
+    <p *ngSwitchCase="'Mateo'">Hola soy Mateo</p>
+    <p *ngSwitchCase="'Teo'">Hola soy Teo</p>
+    <p *ngSwitchCase="'Elimon'">Hola soy Elimon</p>
+    <p *ngSwitchDefault=>Invalid name</p>
+  </div>
+  <hr />
+
+  <!-- Formularios -->
+
+  <!-- Facilita mucho el codigo a la hora de usar un imput -->
+  <input type="color" [formControl]="colorCtrl">
+  <p>color: {{ colorCtrl.value }}</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   </div>
