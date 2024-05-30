@@ -1,7 +1,8 @@
 import { CommonModule } from '@angular/common';
-import { Component, signal } from '@angular/core';
+import { Component, computed, signal } from '@angular/core';
 import {Task} from './../../models/task.model'
 import{ FormControl, ReactiveFormsModule, Validators } from '@angular/forms'
+
 
 
 @Component({
@@ -16,15 +17,33 @@ export class HomeComponent {
   tasks = signal<Task[]>([
     {
       id: Date.now(),
-      title: `crear proyecto` ,
+      title: `Crear proyecto` ,
       completed: false,
     },
     {
       id: Date.now(),
-      title: `crear componentes `,
+      title: `Crear modelos` ,
+      completed: false,
+    },
+    {
+      id: Date.now(),
+      title: `Crear componentes `,
       completed: false,
     }
   ]);
+
+  filter = signal<'all' | 'Pending' | 'Completed'>('all'); 
+  tasksByFilter = computed(() =>{
+    const filter = this.filter();
+    const tasks = this.tasks();
+    if (filter === 'Pending'){
+      return tasks.filter(task => !task.completed);
+    }
+    if (filter === 'Completed'){
+      return tasks.filter(task => task.completed)
+    }
+    return tasks;
+  })
 
   // manejar y darle control a la entrada de valores
   newTaskCtrl = new FormControl('',{
@@ -32,9 +51,9 @@ export class HomeComponent {
     validators: [
       Validators.required,
     ]
-  }
-    
-  )
+  })
+
+
 // validacion para no aceptar valores nulos ni espacios (trim quita espacios)
   changeHanler(){
     if(this.newTaskCtrl.valid){
@@ -63,10 +82,14 @@ export class HomeComponent {
 
   deleteTalks(index: number){
     this.tasks.update((tasks) => tasks.filter((task, position)=> position !== index))
+    // this.tasks.mutate(state =>{
+    //   state.splice(index, 1)
+    // })
+}
 
-  }
 // es basado en actulizar una pocision en especifico sin mutar el array
   updateTaks(index: number){
+  
     this.tasks.update((tasks) => {
       return tasks.map((task, position) =>{
         if (position === index){
@@ -78,10 +101,74 @@ export class HomeComponent {
         return task;
       })
     })
+    
+  //  this.tasks.mutate(state =>{
+  //   const currentTask = state[index];
+  //   state[index] = {
+  //     ...currentTask,
+  //     completed: !currentTask.completed
+  //   }
+  //  })
+  } 
 
+updateTaskEditingMode(index: number){
+  this.tasks.update((prevState) => {
+    return prevState.map((task, position) =>{
+      if (position === index){
+        return {
+          ...task,
+          editing: true
+      }
+    }
+      return {
+        ...task,
+        editing: false
+      };
+    })
+  });
+}
 
+updateTaskText(index: number, event: Event){
+  const input = event.target as HTMLInputElement;
+  this.tasks.update((prevState) => {
+    return prevState.map((task, position) =>{
+      if (position === index){
+        return {
+          ...task,
+          title: input.value,
+          editing: false
+      }
+    }
+      return task;
+        
+    })
+  });
+}
+
+  changeFilter(filter: 'all' | 'Pending' | 'Completed'){
+    this.filter.set(filter);
   }
 
 
 
+
+
+
+
+
+
+
+
+
 }
+
+
+
+
+
+
+
+
+
+
+

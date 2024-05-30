@@ -100,7 +100,22 @@
       <rect x="0" y="0" height="100" width="100" [attr.fill]="colorCtrl.value" />
     </g>
   </svg>
+  <hr />
+  <!-- modificacion de alguna propiedad de css -->
+  <input type="number" [formControl]="widthCtrl">
+  <span class="box" [style.width.px]="widthCtrl.value"></span> 
+  <hr />
 
+  <!-- Clases -->
+
+  <p>
+    <input type="text" [formControl]="nameCtrl" placeholder="Escribe un nombre"> <br/>
+    <!-- El class.sow(puede ser cualquier nombre) se utiliza para activar class de estilo en css-->
+    <span class="message-error" [class.sow]="nameCtrl.invalid && nameCtrl.touched">Nombre invalido</span>
+  </p>
+  <p>
+    <input type="text">
+  </p>
 
 
 
