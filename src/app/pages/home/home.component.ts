@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, computed, signal } from '@angular/core';
+import { Component, Injector, computed, effect,inject, signal } from '@angular/core';
 import {Task} from './../../models/task.model'
 import{ FormControl, ReactiveFormsModule, Validators } from '@angular/forms'
 
@@ -14,23 +14,9 @@ import{ FormControl, ReactiveFormsModule, Validators } from '@angular/forms'
 })
 export class HomeComponent {
 // ahora task es ua interfaz que me dice la estructura para poder agregar algo a el array
-  tasks = signal<Task[]>([
-    {
-      id: Date.now(),
-      title: `Crear proyecto` ,
-      completed: false,
-    },
-    {
-      id: Date.now(),
-      title: `Crear modelos` ,
-      completed: false,
-    },
-    {
-      id: Date.now(),
-      title: `Crear componentes `,
-      completed: false,
-    }
-  ]);
+  tasks = signal<Task[]>([]);
+
+  
 
   filter = signal<'all' | 'Pending' | 'Completed'>('all'); 
   tasksByFilter = computed(() =>{
@@ -52,6 +38,40 @@ export class HomeComponent {
       Validators.required,
     ]
   })
+
+  constructor(){
+    effect (() =>{
+      const tasks = this.tasks();
+      console.log(tasks)
+      localStorage.setItem('tasks', JSON.stringify(tasks))
+    })
+  }
+  ngOnInit(){
+    const storage = localStorage.getItem('tasks');
+    if(storage){
+      const tasks =JSON.parse(storage);
+      this.tasks.set(tasks)
+    }
+  }
+
+  // injector = inject(Injector);
+
+  // ngOnInit(){
+  //   const storage = localStorage.getItem('tastks');
+  //   if (storage) {
+  //     const tasks = JSON.parse(storage);
+  //     this.tasks.set(tasks)
+  //   }
+  // }
+
+  // trackTasks(){
+  //   effect(() => {
+  //     const tasks = this.tasks();
+  //     console.log('hoa')
+  //     console.log(tasks);
+  //     localStorage.setItem('tasks', JSON.stringify(tasks));
+  //   }, { injector: this.injector })
+  // }
 
 
 // validacion para no aceptar valores nulos ni espacios (trim quita espacios)
